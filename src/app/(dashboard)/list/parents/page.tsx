@@ -4,6 +4,7 @@ import TableSearch from '@/components/TableSearch';
 import Image from 'next/image';
 import Link from 'next/link';
 import { parentsData, role, studentsData, teachersData } from "@/lib/data";
+import FormModal from '@/components/FormModal';
 
 type Parent = {
     id: number;
@@ -60,11 +61,12 @@ const ParentsListPage = () => {
       <td className="hidden md:table-cell">{item.address}</td>
       <td>
         <div className='flex items-center gap-2'>
-          <Link href={`/list/teachers/${item.id}`}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-purple-200">
-              <Image src="/delete.png" alt="" width={16} height={16} />
-            </button>
-          </Link>
+        {role === "admin" && (
+            <>
+              <FormModal table="parent" type="update" data={item} />
+              <FormModal table="parent" type="delete" id={item.id} />
+            </>
+          )}
         </div>
       </td>
     </tr>
@@ -83,6 +85,11 @@ const ParentsListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-sky-200">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
+            {
+              role === 'admin' &&(
+                <FormModal table="teacher" type="create"/>
+              )
+            }
           </div>
         </div>
       </div>
