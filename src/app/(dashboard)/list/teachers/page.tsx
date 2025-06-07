@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { role, teachersData } from "@/lib/data";
 import FormModal from '@/components/FormModal';
-import { Class, Subject, Teacher } from '@prisma/client';
+import { Class, Prisma, Subject, Teacher } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
 
@@ -92,19 +92,48 @@ const TeacherListPage = async ({searchParams,}:{
 
   //pagination and searchParams 
   const {page,...queryParams}=searchParams;
+
   const p= page ? parseInt(page) : 1
 
-  // tracher data from db 
-  const data =await prisma.teacher.findMany({
-    include:{
-      subjects:true,
-      classes:true,
-    },
-    take: ITEM_PER_PAGE ,
-    skip: ITEM_PER_PAGE * (p-1)
+   // URL PARAMS CONDITION
 
-  })
-  // console.log(data)
+  const query: Prisma.TeacherWhereInput = {};
+
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+            query.lessons = {
+              some: {
+                classId: parseInt(value),
+              },
+            };
+            break;
+          case "search":
+            query.name = { contains: value, mode: "insensitive" };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  // tracher data from db 
+const [data, count] = await prisma.$transaction([
+    prisma.teacher.findMany({
+      where: query,
+      include: {
+        subjects: true,
+        classes: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    prisma.teacher.count({ where: query }),
+  ]);
+ 
 
   return (
     <div className="bg-white p-4 m-4 mt-0 flex-1 h-full rounded-md">
@@ -125,7 +154,7 @@ const TeacherListPage = async ({searchParams,}:{
 
       <Table columns={columns} renderRow={renderRow} data={data} />
 
-      {/* <Pagination page={p} count={count} /> */}
+      <Pagination page={p} count={count} />
     </div>
   );
 };
