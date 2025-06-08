@@ -6,7 +6,7 @@ import InputField from "../InputField";
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
 import { createSubject, updateSubject } from "@/lib/actions";
 import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -31,13 +31,10 @@ const SubjectForm = ({
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE
 
-  const [state, formAction] = useFormState(
-    type === "create" ? createSubject : updateSubject,
-    {
-      success: false,
-      error: false,
-    }
-  );
+  const [state, formAction] = useActionState(
+  type === "create" ? createSubject : updateSubject,
+  { success: false, error: false }
+);
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -106,7 +103,7 @@ const SubjectForm = ({
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>
       )}
-      <button className="bg-blue-400 text-white p-2 rounded-md">
+      <button className="bg-sky-300 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}
       </button>
     </form>

@@ -4,13 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, startTransition, useEffect, useState } from "react";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
 import { useFormState } from "react-dom";
 import { createTeacher, updateTeacher } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CldUploadWidget } from "next-cloudinary";
+import { useActionState } from "react";
 
 const TeacherForm = ({
   type,
@@ -33,7 +34,7 @@ const TeacherForm = ({
 
   const [img, setImg] = useState<any>();
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createTeacher : updateTeacher,
     {
       success: false,
@@ -41,10 +42,11 @@ const TeacherForm = ({
     }
   );
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+ const onSubmit = handleSubmit((data) => {
+  startTransition(() => {
     formAction({ ...data, img: img?.secure_url });
   });
+});
 
   const router = useRouter();
 
@@ -56,7 +58,8 @@ const TeacherForm = ({
     }
   }, [state, router, type, setOpen]);
 
-  const { subjects } = relatedData;
+  const subjects = relatedData?.subjects || [];
+
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
