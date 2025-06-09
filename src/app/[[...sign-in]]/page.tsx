@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 
 
 export default function SignInPage() {
-    const { isSignedIn, user, isLoaded } = useUser()
+    const {  user } = useUser()
    
     const router=useRouter()
 
