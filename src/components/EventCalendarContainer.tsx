@@ -2,13 +2,17 @@ import Image from "next/image";
 import EventCalendar from "./EventCalendar";
 import EventList from "./EventList";
 
-
 const EventCalendarContainer = async ({
   searchParams,
 }: {
-  searchParams: { [keys: string]: string | undefined };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
-  const { date } =  searchParams;
+  // safely get date only if it's a string (not array or undefined)
+  let date: string | undefined;
+  if (searchParams && typeof searchParams.date === "string") {
+    date = searchParams.date;
+  }
+
   return (
     <div className="bg-white p-4 rounded-md">
       <EventCalendar />

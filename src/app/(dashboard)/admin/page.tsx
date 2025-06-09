@@ -8,7 +8,7 @@ import UserCard from "@/components/UserCard";
 const AdminPage = async ({
   searchParams,
 }: {
-  searchParams: { [keys: string]: string | undefined };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
    const { page, ...queryParams } = searchParams ?? {};
   return (
