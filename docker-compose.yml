@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgress:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: skabri
+      POSTGRES_PASSWORD: sk108
+      POSTGRES_DB: college
+    ports:
+      - '5432:5432'
+    volumes:
+      - /var/lib/postgresql/data
+    
+  app:
+    build: .
+    container_name: nextjs_app
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL: postgresql://skabri:sk108@localhost:5432/mydb?schema=public
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
