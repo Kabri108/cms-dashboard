@@ -13,10 +13,10 @@ type AnnouncementList = Announcement & { class: Class };
 const AnnouncementListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: any;
 }) => {
   
-  const { userId, sessionClaims } = auth();
+  const { userId, sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
   const currentUserId = userId;
   
@@ -79,7 +79,9 @@ const AnnouncementListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "search":
-            query.title = { contains: value, mode: "insensitive" };
+           if (typeof value === "string" && value.trim() !== "") {
+    query.title = { contains: value, mode: "insensitive" };
+  }
             break;
           default:
             break;

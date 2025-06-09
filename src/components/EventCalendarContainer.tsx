@@ -5,14 +5,9 @@ import EventList from "./EventList";
 const EventCalendarContainer = async ({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: { [keys: string]: string | undefined };
 }) => {
-  // safely get date only if it's a string (not array or undefined)
-  let date: string | undefined;
-  if (searchParams && typeof searchParams.date === "string") {
-    date = searchParams.date;
-  }
-
+  const { date } = searchParams;
   return (
     <div className="bg-white p-4 rounded-md">
       <EventCalendar />

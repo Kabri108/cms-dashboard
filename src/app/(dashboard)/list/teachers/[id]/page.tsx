@@ -12,7 +12,7 @@ import { notFound } from "next/navigation";
 const SingleTeacherPage = async ({
   params: { id },
 }: {
-  params: { id: string };
+  params: any;
 }) => {
   const { sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;

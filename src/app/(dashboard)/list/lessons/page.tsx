@@ -16,7 +16,7 @@ type LessonList = Lesson & { subject: Subject } & { class: Class } & {
 const LessonListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: any;
 }) => {
 
 const { sessionClaims } = await auth();

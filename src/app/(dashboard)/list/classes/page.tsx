@@ -13,10 +13,10 @@ type ClassList = Class & { supervisor: Teacher };
 const ClassListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: any;
 }) => {
 
-const { sessionClaims } = await auth();
+const { sessionClaims } = await await auth();
 const role = (sessionClaims?.metadata as { role?: string })?.role;
 
 

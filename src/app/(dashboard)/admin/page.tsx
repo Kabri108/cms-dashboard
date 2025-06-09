@@ -5,12 +5,11 @@ import EventCalendarContainer from "@/components/EventCalendarContainer";
 import FinanceChart from "@/components/FinanceChart";
 import UserCard from "@/components/UserCard";
 
-const AdminPage = async ({
+const AdminPage =  async ({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) => {
-   const { page, ...queryParams } = searchParams ?? {};
+  searchParams?: any;  
+})=> {
   return (
     <div className="p-4 flex gap-4 flex-col md:flex-row">
       {/* LEFT */}

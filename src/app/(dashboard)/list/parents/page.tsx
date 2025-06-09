@@ -14,7 +14,7 @@ type ParentList = Parent & { students: Student[] };
 const ParentListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: any;
 }) => {
 
 const { sessionClaims } = await auth();

@@ -13,7 +13,7 @@ import { notFound } from "next/navigation";
 const SingleStudentPage = async ({
   params: { id },
 }: {
-  params: { id: string };
+  params: any;
 }) => {
   const { sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;

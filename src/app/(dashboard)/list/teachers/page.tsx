@@ -14,7 +14,7 @@ type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[] };
 const TeacherListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: any;
 }) => {
   const { sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
