@@ -5,14 +5,13 @@ import EventCalendarContainer from '@/components/EventCalendarContainer';
 import FinanceChart from '@/components/FinanceChart';
 import UserCard from '@/components/UserCard';
 
-interface AdminPageProps {
-  searchParams?: Record<string, string | string[] | undefined>;
-}
-
-export default function AdminPage({ searchParams }: AdminPageProps) {
+const AdminPage = ({
+  searchParams,
+}: {
+  searchParams: { [keys: string]: string | undefined };
+}) => {
   return (
     <div className="p-4 flex flex-col md:flex-row gap-4">
-      {/* Left column */}
       <div className="w-full lg:w-2/3 flex flex-col gap-8">
         <div className="flex gap-4 justify-between flex-wrap">
           <UserCard type="admin" />
@@ -29,15 +28,16 @@ export default function AdminPage({ searchParams }: AdminPageProps) {
           </div>
         </div>
         <div className="w-full h-[500px]">
-          <FinanceChart />
+          <FinanceChart/>
         </div>
       </div>
 
-      {/* Right column */}
       <div className="w-full lg:w-1/3 flex flex-col gap-8">
-        <EventCalendarContainer searchParams={searchParams} />
-        <Announcements />
+      <EventCalendarContainer searchParams={searchParams}/>
+      <Announcements/>
       </div>
     </div>
   );
-}
+};
+
+export default AdminPage;
