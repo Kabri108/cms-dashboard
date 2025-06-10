@@ -82,7 +82,7 @@ const AssignmentListPage = async ({
     </tr>
   );
 
-  const { page, ...queryParams } = searchParams;
+  const { page, ...queryParams } = await searchParams;
 
   const p = page ? parseInt(page) : 1;
 
@@ -94,24 +94,25 @@ const AssignmentListPage = async ({
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
-        switch (key) {
-          case "classId":
-            query.lesson.classId = parseInt(value);
-            break;
-          case "teacherId":
-            query.lesson.teacherId = value;
-            break;
-          case "search":
-            query.lesson.subject = {
-              name: { contains: value, mode: "insensitive" },
-            };
-            break;
-          default:
-            break;
-        }
-      }
+  if (typeof value === "string" && value.trim() !== "") {
+    switch (key) {
+      case "classId":
+        query.lesson.classId = parseInt(value);
+        break;
+      case "teacherId":
+        query.lesson.teacherId = value;
+        break;
+      case "search":
+        query.lesson.subject = {
+          name: { contains: value, mode: "insensitive" },
+        };
+        break;
+      default:
+        break;
     }
+  }
+}
+
   }
 
   // ROLE CONDITIONS

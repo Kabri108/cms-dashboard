@@ -82,7 +82,7 @@ const renderRow = (item: ExamList) => (
   </tr>
 );
 
-  const { page, ...queryParams } = searchParams;
+  const { page, ...queryParams } = await searchParams;
 
   const p = page ? parseInt(page) : 1;
 
@@ -96,16 +96,23 @@ const renderRow = (item: ExamList) => (
       if (value !== undefined) {
         switch (key) {
           case "classId":
-            query.lesson.classId = parseInt(value);
+           if (typeof value === "string" && value.trim() !== "") {
+  query.lesson.classId = parseInt(value, 10);
+}
+
             break;
           case "teacherId":
-            query.lesson.teacherId = value;
+            if (typeof value === "string" && value.trim() !== "") {
+  query.lesson.teacherId = value;
+}
             break;
           case "search":
-            query.lesson.subject = {
-              name: { contains: value, mode: "insensitive" },
-            };
-            break;
+            if (typeof value === "string" && value.trim() !== "") {
+        query.lesson.subject = {
+          name: { contains: value, mode: "insensitive" },
+        };
+      }
+      break;
           default:
             break;
         }

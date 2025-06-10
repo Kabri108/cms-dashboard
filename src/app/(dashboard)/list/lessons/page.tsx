@@ -24,6 +24,7 @@ const role = (sessionClaims?.metadata as { role?: string })?.role;
 
 
 const columns = [
+   { header: "Lesson Name", accessor: "lessonName" },
   {
     header: "Subject Name",
     accessor: "name",
@@ -52,7 +53,9 @@ const renderRow = (item: LessonList) => (
     key={item.id}
     className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
   >
-    <td className="flex items-center gap-4 p-4">{item.subject.name}</td>
+
+    <td className="flex items-center gap-4 p-4">{item.name}</td>
+    <td>{item.subject.name}</td>
     <td>{item.class.name}</td>
     <td className="hidden md:table-cell">
       {item.teacher.name + " " + item.teacher.surname}
@@ -78,28 +81,29 @@ const renderRow = (item: LessonList) => (
 
   const query: Prisma.LessonWhereInput = {};
 
-  if (queryParams) {
-    for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
-        switch (key) {
-          case "classId":
-            query.classId = parseInt(value);
-            break;
-          case "teacherId":
-            query.teacherId = value;
-            break;
-          case "search":
-            query.OR = [
-              { subject: { name: { contains: value, mode: "insensitive" } } },
-              { teacher: { name: { contains: value, mode: "insensitive" } } },
-            ];
-            break;
-          default:
-            break;
-        }
+if (queryParams) {
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (typeof value === "string") {
+      switch (key) {
+        case "classId":
+          query.classId = parseInt(value);
+          break;
+        case "teacherId":
+          query.teacherId = value;
+          break;
+        case "search":
+          query.OR = [
+            { subject: { name: { contains: value, mode: "insensitive" } } },
+            { teacher: { name: { contains: value, mode: "insensitive" } } },
+          ];
+          break;
+        default:
+          break;
       }
     }
   }
+}
+
 
   const [data, count] = await prisma.$transaction([
     prisma.lesson.findMany({

@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+import { Day } from "@prisma/client";
 export const subjectSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(1, { message: "Subject name is required!" }),
@@ -87,3 +87,70 @@ export const examSchema = z.object({
 });
 
 export type ExamSchema = z.infer<typeof examSchema>;
+
+
+export const assignmentSchema = z
+  .object({
+    id: z.coerce.number().optional(),
+    title: z.string().min(1, { message: "Assignment title is required!" }),
+
+    // If your inputs already give ISO strings you can switch to z.string()
+    startDate: z.coerce.date({ message: "Start date is required!" }),
+    dueDate:  z.coerce.date({ message: "Due date is required!" }),
+
+    lessonId: z.coerce.number({
+      required_error: "Lesson is required!",
+      invalid_type_error: "Lesson ID must be a number",
+    }),
+  })
+  .refine(
+    ({ startDate, dueDate }) => dueDate > startDate,
+    {
+      path: ["dueDate"],
+      message: "Due date must be after start date!",
+    }
+  );
+
+export type AssignmentSchema = z.infer<typeof assignmentSchema>;
+
+
+
+
+
+
+export const lessonSchema = z.object({
+id: z.number().optional(),
+  name: z.string().min(1, "Lesson name is required"),
+  subjectId: z
+    .string({ required_error: "Subject is required" })
+    .min(1)
+    .transform((val) => parseInt(val)),
+  classId: z
+    .string({ required_error: "Class is required" })
+    .min(1)
+    .transform((val) => parseInt(val)),
+  teacherId: z.string({ required_error: "Teacher is required" }),
+  day: z.nativeEnum(Day, { required_error: "Day is required" }),
+  startTime: z.string(),
+  endTime: z.string(),
+});
+
+export type LessonSchema = z.infer<typeof lessonSchema>;
+
+
+// export const lessonSchema = z.object({
+//   id: z.number().optional(),
+//   name: z.string().min(1, "Lesson name is required"),
+//   subjectId: z
+//     .string({ required_error: "Subject is required" })
+//     .min(1)
+//     .transform((val) => parseInt(val)),
+//   classId: z
+//     .string({ required_error: "Class is required" })
+//     .min(1)
+//     .transform((val) => parseInt(val)),
+//   teacherId: z.string({ required_error: "Teacher is required" }),
+//   day: z.nativeEnum(Day, { required_error: "Day is required" }),
+//   startTime: z.string(),
+//   endTime: z.string(),
+// });

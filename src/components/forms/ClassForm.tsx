@@ -66,6 +66,10 @@ const ClassForm = ({
 
   const { teachers, grades } = relatedData;
 
+  console.log("grades", relatedData.grades);
+
+
+
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">

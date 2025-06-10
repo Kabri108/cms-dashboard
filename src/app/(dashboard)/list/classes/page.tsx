@@ -16,7 +16,7 @@ const ClassListPage = async ({
   searchParams: any;
 }) => {
 
-const { sessionClaims } = await await auth();
+const { sessionClaims } =  await auth();
 const role = (sessionClaims?.metadata as { role?: string })?.role;
 
 
@@ -90,7 +90,9 @@ const renderRow = (item: ClassList) => (
             query.supervisorId = value;
             break;
           case "search":
-            query.name = { contains: value, mode: "insensitive" };
+           if (typeof value === "string" && value.trim() !== "") {
+  query.name = { contains: value, mode: "insensitive" };
+}
             break;
           default:
             break;

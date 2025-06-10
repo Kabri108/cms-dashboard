@@ -91,7 +91,7 @@ const EventListPage = async ({
     </tr>
   );
 
-  const { page, ...queryParams } = searchParams;
+  const { page, ...queryParams } = await searchParams;
 
   const p = page ? parseInt(page) : 1;
 
@@ -104,7 +104,9 @@ const EventListPage = async ({
       if (value !== undefined) {
         switch (key) {
           case "search":
-            query.title = { contains: value, mode: "insensitive" };
+            if (typeof value === "string" && value.trim() !== "") {
+  query.title = { contains: value, mode: "insensitive" };
+}
             break;
           default:
             break;
