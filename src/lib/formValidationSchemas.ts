@@ -119,16 +119,16 @@ export type AssignmentSchema = z.infer<typeof assignmentSchema>;
 
 
 export const lessonSchema = z.object({
-id: z.number().optional(),
+  id: z.number().optional(),
   name: z.string().min(1, "Lesson name is required"),
   subjectId: z
     .string({ required_error: "Subject is required" })
     .min(1)
-    .transform((val) => parseInt(val)),
+    .pipe(z.number()), // ✅ Ensures the inferred type is number
   classId: z
     .string({ required_error: "Class is required" })
     .min(1)
-    .transform((val) => parseInt(val)),
+    .pipe(z.number()), // ✅ Ensures the inferred type is number
   teacherId: z.string({ required_error: "Teacher is required" }),
   day: z.nativeEnum(Day, { required_error: "Day is required" }),
   startTime: z.string(),

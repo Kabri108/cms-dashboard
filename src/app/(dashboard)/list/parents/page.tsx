@@ -81,7 +81,7 @@ const renderRow = (item: ParentList) => (
   </tr>
 );
 
-  const { page, ...queryParams } = searchParams;
+  const { page, ...queryParams } = await searchParams;
 
   const p = page ? parseInt(page) : 1;
 
@@ -90,18 +90,22 @@ const renderRow = (item: ParentList) => (
   const query: Prisma.ParentWhereInput = {};
 
   if (queryParams) {
-    for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
-        switch (key) {
-          case "search":
-            query.name = { contains: value, mode: "insensitive" };
-            break;
-          default:
-            break;
-        }
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (value !== undefined && value !== null && value !== "") {
+      switch (key) {
+        case "search":
+          query.name = {
+            contains: value.toString(), // Ensure value is string
+            mode: "insensitive",
+          };
+          break;
+        default:
+          break;
       }
     }
   }
+}
+
 
   const [data, count] = await prisma.$transaction([
     prisma.parent.findMany({

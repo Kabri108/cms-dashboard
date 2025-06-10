@@ -29,9 +29,9 @@ const LessonForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LessonSchema>({
-    resolver: zodResolver(lessonSchema),
-  });
+  } = useForm({
+  resolver: zodResolver(lessonSchema),
+});
 
   const [state, formAction] = useActionState(
     type === "create" ? createLesson : updateLesson,

@@ -17,6 +17,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useActionState } from 'react';
 import { toast } from 'react-toastify';
 import { FormContainerProps } from './FormContainer';
+import type { ReactElement } from 'react';
+
+
 
 const deleteActionMap = {
   subject: deleteSubject,
@@ -70,7 +73,7 @@ const forms: {
     type: 'create' | 'update',
     data?: any,
     relatedData?: any
-  ) => JSX.Element;
+  ) => ReactElement;
 } = {
   subject: (setOpen, type, data, relatedData) => (
     <SubjectForm

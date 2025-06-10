@@ -64,19 +64,19 @@ const SubjectListPage = async ({
 
   const query: Prisma.SubjectWhereInput = {};
 
-  if (queryParams) {
-    for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
-        switch (key) {
-          case "search":
-            query.name = { contains: value, mode: "insensitive" };
-            break;
-          default:
-            break;
-        }
+ if (queryParams) {
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (value !== null && value !== undefined && value !== "") {
+      switch (key) {
+        case "search":
+          query.name = { contains: value.toString(), mode: "insensitive" };
+          break;
+        default:
+          break;
       }
     }
   }
+}
 
   const [data, count] = await prisma.$transaction([
     prisma.subject.findMany({

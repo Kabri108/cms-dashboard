@@ -8,6 +8,7 @@ type InputFieldProps = {
   defaultValue?: string;
   error?: FieldError;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  hidden?: boolean;
 };
 
 const InputField = ({
@@ -18,6 +19,7 @@ const InputField = ({
   defaultValue,
   error,
   inputProps,
+  hidden = false,
 }: InputFieldProps) => {
   return (
     <div className="flex flex-col gap-2 w-full md:w-1/4">

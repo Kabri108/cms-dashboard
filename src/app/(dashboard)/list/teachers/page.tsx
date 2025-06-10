@@ -113,25 +113,30 @@ const TeacherListPage = async ({
   const query: Prisma.TeacherWhereInput = {};
 
   if (queryParams) {
-    for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
-        switch (key) {
-          case "classId":
-            query.lessons = {
-              some: {
-                classId: parseInt(value),
-              },
-            };
-            break;
-          case "search":
-            query.name = { contains: value, mode: "insensitive" };
-            break;
-          default:
-            break;
-        }
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (value !== null && value !== undefined && value !== "") {
+      switch (key) {
+        case "classId":
+          query.lessons = {
+            some: {
+              classId: parseInt(value.toString()), // ✅ Safely convert to string
+            },
+          };
+          break;
+
+        case "search":
+          query.name = {
+            contains: value.toString(),
+            mode: "insensitive",
+          };
+          break;
+
+        default:
+          break;
       }
     }
   }
+}
 
   const [data, count] = await prisma.$transaction([
     prisma.teacher.findMany({

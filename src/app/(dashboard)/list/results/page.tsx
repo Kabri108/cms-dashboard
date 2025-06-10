@@ -100,7 +100,7 @@ const renderRow = (item: ResultList) => (
   </tr>
 );
 
-  const { page, ...queryParams } = searchParams;
+  const { page, ...queryParams } = await searchParams;
 
   const p = page ? parseInt(page) : 1;
 
@@ -108,25 +108,34 @@ const renderRow = (item: ResultList) => (
 
   const query: Prisma.ResultWhereInput = {};
 
-  if (queryParams) {
-    for (const [key, value] of Object.entries(queryParams)) {
-      if (value !== undefined) {
-        switch (key) {
-          case "studentId":
-            query.studentId = value;
-            break;
-          case "search":
-            query.OR = [
-              { exam: { title: { contains: value, mode: "insensitive" } } },
-              { student: { name: { contains: value, mode: "insensitive" } } },
-            ];
-            break;
-          default:
-            break;
-        }
+if (queryParams) {
+  for (const [key, value] of Object.entries(queryParams)) {
+    if (value !== null && value !== undefined && value !== "") {
+      switch (key) {
+        case "studentId":
+          query.studentId = value.toString();
+          break;
+        case "search":
+          query.OR = [
+            {
+              exam: {
+                title: { contains: value.toString(), mode: "insensitive" },
+              },
+            },
+            {
+              student: {
+                name: { contains: value.toString(), mode: "insensitive" },
+              },
+            },
+          ];
+          break;
+        default:
+          break;
       }
     }
   }
+}
+
 
   // ROLE CONDITIONS
 
