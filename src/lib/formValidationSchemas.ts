@@ -124,11 +124,11 @@ export const lessonSchema = z.object({
   subjectId: z
     .string({ required_error: "Subject is required" })
     .min(1)
-    .pipe(z.number()), // ✅ Ensures the inferred type is number
+    .pipe(z.number()), 
   classId: z
     .string({ required_error: "Class is required" })
     .min(1)
-    .pipe(z.number()), // ✅ Ensures the inferred type is number
+    .pipe(z.number()), 
   teacherId: z.string({ required_error: "Teacher is required" }),
   day: z.nativeEnum(Day, { required_error: "Day is required" }),
   startTime: z.string(),
@@ -154,3 +154,31 @@ export type LessonSchema = z.infer<typeof lessonSchema>;
 //   startTime: z.string(),
 //   endTime: z.string(),
 // });
+
+
+export const parentSchema = z.object({
+  id: z.string().optional(),
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters long!" })
+    .max(20, { message: "Username must be at most 20 characters long!" }),
+    password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long!" })
+    .optional()
+    .or(z.literal("")),
+  name: z.string().min(1, { message: "First name is required!" }),
+  surname: z.string().min(1, { message: "Last name is required!" }),
+  email: z
+    .string()
+    .email({ message: "Invalid email address!" })
+    .optional()
+    .or(z.literal("")),
+  phone: z.string().optional(),
+  address: z.string(),
+  studentIds: z.array(z.string()).optional()
+});
+
+export type ParentSchema = z.infer<typeof parentSchema>;
+
+

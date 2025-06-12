@@ -64,6 +64,9 @@ const AssignmentForm = dynamic(() => import('./forms/AssignmentForm'), {
 const LessonForm = dynamic(() => import('./forms/LessonForm'), {
   loading: () => <h1>Loading...</h1>,
 });
+const ParentForm = dynamic(() => import('./forms/ParentForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
 
 // TODO: OTHER FORMS
 
@@ -125,6 +128,14 @@ const forms: {
   ),
   lesson: (setOpen, type, data, relatedData) => (
   <LessonForm
+    type={type}
+    data={data}
+    setOpen={setOpen}
+    relatedData={relatedData}
+  />
+),
+parent: (setOpen, type, data, relatedData) => (
+  <ParentForm
     type={type}
     data={data}
     setOpen={setOpen}
