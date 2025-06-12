@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 // import { revalidatePath } from "next/cache";
 import {
@@ -9,10 +9,10 @@ import {
   TeacherSchema,
   LessonSchema,
   AssignmentSchema,
-  ParentSchema
-} from "./formValidationSchemas";
-import prisma from "./prisma";
-import { clerkClient } from "@clerk/nextjs/server";
+  ParentSchema,
+} from './formValidationSchemas';
+import prisma from './prisma';
+import { clerkClient } from '@clerk/nextjs/server';
 
 const getClerk = async () => await clerkClient();
 
@@ -69,7 +69,7 @@ export const deleteSubject = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
   try {
     await prisma.subject.delete({
       where: {
@@ -126,7 +126,7 @@ export const deleteClass = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
   try {
     await prisma.class.delete({
       where: {
@@ -150,11 +150,11 @@ export const createTeacher = async (
     const clerk = await getClerk();
     const user = await clerk.users.createUser({
       username: data.username,
-  password: data.password,
-  firstName: data.name,
-  lastName: data.surname,
-  ...(data.email && { emailAddress: [data.email] }), // only include if email exists
-  publicMetadata: { role: "teacher" },
+      password: data.password,
+      firstName: data.name,
+      lastName: data.surname,
+      ...(data.email && { emailAddress: [data.email] }), // only include if email exists
+      publicMetadata: { role: 'teacher' },
     });
 
     await prisma.teacher.create({
@@ -181,13 +181,16 @@ export const createTeacher = async (
     // revalidatePath("/list/teachers");
     return { success: true, error: false };
   } catch (err: any) {
-  if (err?.errors) {
-    console.error("Clerk Error Details:", JSON.stringify(err.errors, null, 2));
-  } else {
-    console.error("Unexpected error:", err);
+    if (err?.errors) {
+      console.error(
+        'Clerk Error Details:',
+        JSON.stringify(err.errors, null, 2)
+      );
+    } else {
+      console.error('Unexpected error:', err);
+    }
+    return { success: false, error: true };
   }
-  return { success: false, error: true };
-}
 };
 
 export const updateTeacher = async (
@@ -198,10 +201,10 @@ export const updateTeacher = async (
     return { success: false, error: true };
   }
   try {
-   const clerk = await getClerk();
+    const clerk = await getClerk();
     await clerk.users.updateUser(data.id, {
       username: data.username,
-      ...(data.password !== "" && { password: data.password }),
+      ...(data.password !== '' && { password: data.password }),
       firstName: data.name,
       lastName: data.surname,
     });
@@ -211,7 +214,7 @@ export const updateTeacher = async (
         id: data.id,
       },
       data: {
-        ...(data.password !== "" && { password: data.password }),
+        ...(data.password !== '' && { password: data.password }),
         username: data.username,
         name: data.name,
         surname: data.surname,
@@ -241,9 +244,9 @@ export const deleteTeacher = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
   try {
-     const clerk = await getClerk();
+    const clerk = await getClerk();
     await clerk.users.deleteUser(id);
 
     await prisma.teacher.delete({
@@ -281,7 +284,7 @@ export const createStudent = async (
       password: data.password,
       firstName: data.name,
       lastName: data.surname,
-      publicMetadata:{role:"student"}
+      publicMetadata: { role: 'student' },
     });
 
     await prisma.student.create({
@@ -319,11 +322,10 @@ export const updateStudent = async (
     return { success: false, error: true };
   }
   try {
-    
     const clerk = await getClerk();
     await clerk.users.updateUser(data.id, {
       username: data.username,
-      ...(data.password !== "" && { password: data.password }),
+      ...(data.password !== '' && { password: data.password }),
       firstName: data.name,
       lastName: data.surname,
     });
@@ -333,7 +335,7 @@ export const updateStudent = async (
         id: data.id,
       },
       data: {
-        ...(data.password !== "" && { password: data.password }),
+        ...(data.password !== '' && { password: data.password }),
         username: data.username,
         name: data.name,
         surname: data.surname,
@@ -361,7 +363,7 @@ export const deleteStudent = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
   try {
     const clerk = await getClerk();
     await clerk.users.deleteUser(id);
@@ -463,7 +465,7 @@ export const deleteExam = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
 
   // const { userId, sessionClaims } = auth();
   // const role = (sessionClaims?.metadata as { role?: string })?.role;
@@ -484,9 +486,6 @@ export const deleteExam = async (
   }
 };
 
-
-
-
 export const createAssignment = async (
   currentState: CurrentState,
   data: AssignmentSchema
@@ -504,7 +503,7 @@ export const createAssignment = async (
     // revalidatePath("/list/assignments");
     return { success: true, error: false };
   } catch (err) {
-    console.log("Create assignment error:", err);
+    console.log('Create assignment error:', err);
     return { success: false, error: true };
   }
 };
@@ -529,7 +528,7 @@ export const updateAssignment = async (
     // revalidatePath("/list/assignments");
     return { success: true, error: false };
   } catch (err) {
-    console.log("Update assignment error:", err);
+    console.log('Update assignment error:', err);
     return { success: false, error: true };
   }
 };
@@ -538,7 +537,7 @@ export const deleteAssignment = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
 
   try {
     await prisma.assignment.delete({
@@ -550,7 +549,7 @@ export const deleteAssignment = async (
     // revalidatePath("/list/assignments");
     return { success: true, error: false };
   } catch (err) {
-    console.log("Delete assignment error:", err);
+    console.log('Delete assignment error:', err);
     return { success: false, error: true };
   }
 };
@@ -564,11 +563,11 @@ export const createLesson = async (
     const endTime = data.endTime ? new Date(data.endTime) : null;
 
     if (!startTime || isNaN(startTime.getTime())) {
-      throw new Error("Invalid start time format");
+      throw new Error('Invalid start time format');
     }
 
     if (!endTime || isNaN(endTime.getTime())) {
-      throw new Error("Invalid end time format");
+      throw new Error('Invalid end time format');
     }
 
     await prisma.lesson.create({
@@ -585,12 +584,10 @@ export const createLesson = async (
 
     return { success: true, error: false };
   } catch (error) {
-    console.error("Error creating lesson:", error);
+    console.error('Error creating lesson:', error);
     return { success: false, error: true };
   }
 };
-
-
 
 export const updateLesson = async (
   currentState: CurrentState,
@@ -614,17 +611,16 @@ export const updateLesson = async (
 
     return { success: true, error: false };
   } catch (err) {
-    console.error("Update lesson error:", err);
+    console.error('Update lesson error:', err);
     return { success: false, error: true };
   }
 };
-
 
 export const deleteLesson = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
 
   try {
     await prisma.lesson.delete({
@@ -635,38 +631,36 @@ export const deleteLesson = async (
 
     return { success: true, error: false };
   } catch (err) {
-    console.error("Delete lesson error:", err);
+    console.error('Delete lesson error:', err);
     return { success: false, error: true };
   }
 };
-
-
 
 export const createParent = async (
   currentState: CurrentState,
   data: ParentSchema
 ) => {
-   try {
+  try {
     const clerk = await getClerk();
-    const user=await clerk.users.createUser({
+    const user = await clerk.users.createUser({
       username: data.username,
       password: data.password,
       firstName: data.name,
       lastName: data.surname,
-      publicMetadata:{role:"parent"}
+      publicMetadata: { role: 'parent' },
     });
 
- await prisma.parent.create({
-  data: {
-    id: user.id,
-    username: data.username,
-    name: data.name,
-    surname: data.surname,
-    email: data.email || null,
-    phone: data.phone || null,
-    address: data.address,
-  },
-});
+    await prisma.parent.create({
+      data: {
+        id: user.id,
+        username: data.username,
+        name: data.name,
+        surname: data.surname,
+        email: data.email || undefined,
+        phone: data.phone ?? '',
+        address: data.address,
+      },
+    });
 
     // revalidatePath("/list/parents");
     return { success: true, error: false };
@@ -675,8 +669,6 @@ export const createParent = async (
     return { success: false, error: true };
   }
 };
-
-
 
 export const updateParent = async (
   currentState: CurrentState,
@@ -702,7 +694,7 @@ export const updateParent = async (
         username: data.username,
         name: data.name,
         surname: data.surname,
-        email: data.email || null,
+        email: data.email || undefined,
         phone: data.phone,
         address: data.address,
         students: {
@@ -714,23 +706,19 @@ export const updateParent = async (
     // revalidatePath("/list/parents");
     return { success: true, error: false };
   } catch (err) {
-    console.log("Update parent error:", err);
+    console.log('Update parent error:', err);
     return { success: false, error: true };
   }
 };
-
-
-
-
 
 export const deleteParent = async (
   currentState: CurrentState,
   data: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = data.get('id') as string;
   try {
-     const clerk = await getClerk();
-    const user =await clerk.users.deleteUser(id);
+    const clerk = await getClerk();
+    const user = await clerk.users.deleteUser(id);
 
     await prisma.parent.delete({
       where: {
