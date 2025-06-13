@@ -8,6 +8,7 @@ import Image from "next/image";
 
 import { auth } from "@clerk/nextjs/server";
 import FormContainer from "@/components/FormContainer";
+import { headers } from "next/headers";
 
 type ParentList = Parent & { students: Student[] };
 
@@ -26,6 +27,11 @@ const columns = [
   {
     header: "Info",
     accessor: "info",
+  },
+  {
+    header:"Parent Id",
+    accessor:"id",
+     className: "hidden md:table-cell",
   },
   {
     header: "Student Names",
@@ -63,6 +69,7 @@ const renderRow = (item: ParentList) => (
         <p className="text-xs text-gray-500">{item?.email}</p>
       </div>
     </td>
+    <td className="hidden md:table-cell">{item.id}</td>
     <td className="hidden md:table-cell">
       {item.students.map((student) => student.name).join(",")}
     </td>

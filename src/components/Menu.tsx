@@ -39,7 +39,7 @@ const menuItems = [
       },
       {
         icon: '/class.png',
-        label: 'Classes',
+        label: 'Departments',
         href: '/list/classes',
         visible: ['admin', 'teacher'],
       },
